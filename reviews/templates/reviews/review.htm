@@ -7,11 +7,14 @@
 </head>
 
 <body>
-    <form>
+    <form action='/' method="POST">
+        {% csrf_token %}
+        {% if has_error %}
+        <p>This form is Invalid - please enter a valid username!</p>
+        {% endif %}
         <label for="username">Your Name</label>
-        <input type="username" name="username" type="text">
-        <button>Send</button>
+        <input id="username" name="username" type="text">
+        <button type="submit">Send</button>
     </form>
-<h1>Your Review</h1>
 </body>
 </html>
