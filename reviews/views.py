@@ -4,7 +4,7 @@ from .forms import ReviewForm
 from django.views import View
 from django.views.generic.base import TemplateView #only return template with get_context_data
 from django.views.generic import ListView, DetailView
-from django.views.generic.edit import FormView
+from django.views.generic.edit import CreateView
 from .models import Review
 # Create your views here.
 
@@ -17,14 +17,15 @@ from .models import Review
  #review.save()
 
 
-class ReviewView(FormView):
+class ReviewView(CreateView):
+    model = Review
     form_class = ReviewForm
     template_name = "reviews/review.htm"
     success_url = "/thank-you"
     
-    def form_valid(self, form):
-        form.save()
-        return super().form_valid(form)
+    # def form_valid(self, form):
+    #     form.save()
+    #     return super().form_valid(form) only works with FormView
 
 # class ReviewView(View):
 #     def get(self, request, *args, **kwargs):
