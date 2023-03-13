@@ -4,6 +4,7 @@ from .forms import ReviewForm
 from django.views import View
 from django.views.generic.base import TemplateView #only return template with get_context_data
 from django.views.generic import ListView, DetailView
+from django.views.generic.edit import FormView
 from .models import Review
 # Create your views here.
 
@@ -16,19 +17,28 @@ from .models import Review
  #review.save()
 
 
-class ReviewView(View):
-    def get(self, request, *args, **kwargs):
-        form = ReviewForm()
-        return render(request, 'reviews/review.htm', {'form':form})
+class ReviewView(FormView):
+    form_class = ReviewForm
+    template_name = "reviews/review.htm"
+    success_url = "/thank-you"
+    
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
+
+# class ReviewView(View):
+#     def get(self, request, *args, **kwargs):
+#         form = ReviewForm()
+#         return render(request, 'reviews/review.htm', {'form':form})
     
     
         
-    def post(self, request, *args, **kwargs):
-         form = ReviewForm(request.POST)
-         if form.is_valid():
-            form.save()
-            return HttpResponseRedirect("/thank-you")
-         return render(request, 'reviews/review.htm', {'form':form})
+#     def post(self, request, *args, **kwargs):
+#          form = ReviewForm(request.POST)
+#          if form.is_valid():
+#             form.save()
+#             return HttpResponseRedirect("/thank-you")
+#          return render(request, 'reviews/review.htm', {'form':form})
     
 
 # def review(request):
@@ -83,14 +93,16 @@ class ReviewListView(ListView):
     #     return context
     
     
-class SingleReviewView(TemplateView):
+class SingleReviewView(DetailView):
     template_name = 'reviews/single_review.htm'
+    model = Review #use model Name in templates as lowercase for you to render the data
     
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        review_id = kwargs["id"] #this is the id we passed in the urls
-        selected_review = get_object_or_404(Review, pk=review_id)
-        context["review"] = selected_review
-        return context
+    
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs) 
+    #     review_id = kwargs["id"] #this is the id we passed in the urls
+    #     selected_review = get_object_or_404(Review, pk=review_id)
+    #     context["review"] = selected_review
+    #     return context
     
     
