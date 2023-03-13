@@ -98,7 +98,16 @@ class SingleReviewView(DetailView):
     template_name = 'reviews/single_review.htm'
     model = Review #use model Name in templates as lowercase for you to render the data
     
-    
+    def get_context_data(self, **kwargs):
+         context = super().get_context_data(**kwargs)
+         loaded_review = self.object
+         request = self.request
+         favorite_id = request.session["favorite_review"]
+         context["is_favorite"] = favorite_id == str(loaded_review.id)
+         return context
+         
+         
+         
     # def get_context_data(self, **kwargs):
     #     context = super().get_context_data(**kwargs) 
     #     review_id = kwargs["id"] #this is the id we passed in the urls
