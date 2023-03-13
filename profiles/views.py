@@ -4,6 +4,7 @@ from django.views import View
 from .models import UserProfile
 from django.http import HttpResponseRedirect
 from django.views.generic.edit import CreateView
+from django.views.generic import ListView
 # Create your views here.
 
 # def store_file(file):
@@ -36,3 +37,8 @@ class CreateProfileView(CreateView):
        
 #         return render(request, "profiles/create_profile.htm", {"form": submitted_form})
     
+    
+class ProfilesView(ListView):
+    template_name = "profiles/user_profile.htm"
+    model = UserProfile
+    context_object_name = "profiles"
